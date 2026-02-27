@@ -16,15 +16,18 @@ public:
     string propertyColor;
     int value;
     int rent;
+
+    //rewrote constructor into this format (2/25)
     //constructor
-    MonopolySpace() : propertyName (""),  propertyColor (""), value (0),  rent (0){     //rewrote constructor into this format (2/25)
+    MonopolySpace() : propertyName (""),  propertyColor (""), value (0),  rent (0){
     }
+    //defined the overloaded constructor (2/25)
     //overloaded constructor
     MonopolySpace(string propertyName, string propertyColor, int value, int rent) : propertyName(propertyName), propertyColor(propertyColor), value(value), rent(rent) {
-        //defined the overloaded constructor (2/25)
     }
     bool isEqual(MonopolySpace other) {
-        /* TODO: Define isEqual here (compare by name is fine if you enforce uniqueness) */ // wrote if statemen to check the properties of another space (2/25)
+        /* TODO: Define isEqual here (compare by name is fine if you enforce uniqueness) */
+        // wrote if statemen to check the properties of another space (2/25)
         //checks if all are equal to another
         if (propertyName == other.propertyName && propertyColor == other.propertyColor && value == other.value && rent == other.rent) {
             return true;
@@ -33,8 +36,9 @@ public:
     }
     void print() {
         /* TODO: Define print here */
-        // Example styl
-        //cout << propertyName << " | " << propertyColor << " | $" << value << " | Rent " << rent;
+        // Example style
+        // (2/27) uncommented the cout for the print
+        cout << propertyName << " | " << propertyColor << " | $" << value << " | Rent " << rent;
         }
 };
 
@@ -92,6 +96,32 @@ bool addSpace(T value) {
 // - If empty list: head=tail=player=new, new->next=head
 // - Else: tail->next=new, tail=new, tail->next=head
 // - nodeCount++
+
+    //(2/27) did all the to do above to check max spaces and if the list is empty
+
+    //checks node count
+    if (nodeCount == MAX_SPACES) {
+        return false;
+    }
+
+    //creates new node
+    Node<T> *newNode = new Node<T>(value);
+
+    // if the list is empty sets new node to head tail and player
+    if (nodeCount == 0) {
+        headNode = newNode;
+        tailNode = newNode;
+        playerNode = newNode;
+        newNode->nextNode = headNode;
+    }
+    //else tail will point back to head to make list circular
+    else {
+        tailNode->nextNode = newNode;
+        tailNode = newNode;
+        tailNode->nextNode = headNode;
+    }
+    nodeCount++;
+
 cout << "addSpace unwritten" << endl;
 return false;
 }
