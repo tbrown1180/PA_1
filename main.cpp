@@ -100,7 +100,7 @@ bool addSpace(T value) {
     //(2/27) did all the to do above to check max spaces and if the list is empty
 
     //checks node count
-    if (nodeCount == MAX_SPACES) {
+    if (nodeCount >= MAX_SPACES) {
         return false;
     }
 
@@ -112,6 +112,8 @@ bool addSpace(T value) {
         headNode = newNode;
         tailNode = newNode;
         playerNode = newNode;
+
+        //points back to head to make circular
         newNode->nextNode = headNode;
     }
     //else tail will point back to head to make list circular
@@ -121,33 +123,83 @@ bool addSpace(T value) {
         tailNode->nextNode = headNode;
     }
     nodeCount++;
+    return true;  //(2/28) forgot to return true when it executes properly
 
-cout << "addSpace unwritten" << endl;
-return false;
 }
 // -------------------------------
 // Core B: Add Multiple Spaces at Once
 // -------------------------------
+
+// (2/28) worked on core B to add multiple spaces
+// (2/28) couldn't get multiple spaces to be added will try and fix tomorrow
 int addMany(vector<T> values) {
-// TODO:
-// - Add sequentially until full
-// - Stop exactly when you reach MAX_SPACES
-// - Return number successfully added
-// - Do not corrupt pointers if capacity is exceeded
-cout << "addMany unwritten" << endl;
-return 0;
+
+
+    //loops through the vector
+    for (int i = 0; i < values.size(); i++) {
+        //stops when reaches max
+        if (nodeCount >= MAX_SPACES) {
+            break;
+        }
+
+        //new node
+        Node<T> *newNode = new Node<T>(values);
+
+        if (nodeCount == 0) {
+            headNode = newNode;
+            tailNode = newNode;
+            playerNode = newNode;
+
+            //points back to head to make circular
+            newNode->nextNode = headNode;
+        }
+        //else tail will point back to head to make list circular
+        else {
+            tailNode->nextNode = newNode;
+            tailNode = newNode;
+            tailNode->nextNode = headNode;
+        }
+        nodeCount++;
+    }
+    // TODO:
+    // - Add sequentially until full
+    // - Stop exactly when you reach MAX_SPACES
+    // - Return number successfully added
+    // - Do not corrupt pointers if capacity is exceeded
+    cout << "addMany unwritten" << endl;
+    return 0;
 }
 // -------------------------------
 // Core C: Traversal-Based Player Movement
 // -------------------------------
+
+// (2/28) worked on core C to move player and check passing go
+// (2/28) passing go works when dice is rolled
 void movePlayer(int steps) {
+
+    //checks if board is empty and if it is it exits the function using return
+    if (playerNode == nullptr || nodeCount == 0) {
+        return;
+    }
+
+    for (int i = 0; i < steps; i++) {
+        //checks if player is about to pass go
+        //player = tail because it checks when its about to go back to the head node
+        if (playerNode == tailNode) {
+            passGoCount++;
+        }
+
+        //moving player node forward one
+        playerNode = playerNode->nextNode;
+    }
+
 // TODO:
 // - Move playerNode forward 'steps' times, node-by-node
 // - Wrap naturally because list is circular
 // - Detect and track passing GO:
 // increment passGoCount when a move crosses from tail back to head
 // - Must handle empty list safely
-cout << "movePlayer unwritten" << endl;
+//cout << "movePlayer unwritten" << endl;
 }
 int getPassGoCount() {
 return passGoCount;
@@ -224,8 +276,7 @@ return 0;
 void clear() {
 // TODO:
 // - Safely delete all nodes
-// - Tip: if tailNode exists, break the cycle first: tailNode->nextNode =
-nullptr
+// - Tip: if tailNode exists, break the cycle first: tailNode->nextNode =nullptr
 // - Then delete like a normal singly linked list
 cout << "clear unwritten" << endl;
 }
