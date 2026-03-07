@@ -98,9 +98,8 @@ bool addSpace(T value) {
 // - nodeCount++
 
     //(2/27) did all the to do above to check max spaces and if the list is empty
-
     //checks node count
-    if (nodeCount >= MAX_SPACES) {
+    if (nodeCount == MAX_SPACES) {
         return false;
     }
 
@@ -132,49 +131,33 @@ bool addSpace(T value) {
 
 // (2/28) worked on core B to add multiple spaces
 // (2/28) couldn't get multiple spaces to be added will try and fix tomorrow
+// (3/6) added an added integer to count how many spaces where added and changed my loop to call addSpace since the logic was already there
 int addMany(vector<T> values) {
 
+    int added = 0;
 
-    //loops through the vector
-    for (int i = 0; i < values.size(); i++) {
-        //stops when reaches max
-        if (nodeCount >= MAX_SPACES) {
-            break;
+    for (int i = 0; i < values.size() && nodeCount < MAX_SPACES; i++) {
+        if (addSpace(values[i])) {
+            added++;
         }
-
-        //new node
-        Node<T> *newNode = new Node<T>(values);
-
-        if (nodeCount == 0) {
-            headNode = newNode;
-            tailNode = newNode;
-            playerNode = newNode;
-
-            //points back to head to make circular
-            newNode->nextNode = headNode;
-        }
-        //else tail will point back to head to make list circular
-        else {
-            tailNode->nextNode = newNode;
-            tailNode = newNode;
-            tailNode->nextNode = headNode;
-        }
-        nodeCount++;
     }
+
+    cout <<"Spaces add: "<< added << endl;
+
     // TODO:
     // - Add sequentially until full
     // - Stop exactly when you reach MAX_SPACES
     // - Return number successfully added
     // - Do not corrupt pointers if capacity is exceeded
-    cout << "addMany unwritten" << endl;
-    return 0;
+    //cout << "addMany unwritten" << endl;
+    return added;
 }
 // -------------------------------
 // Core C: Traversal-Based Player Movement
 // -------------------------------
 
 // (2/28) worked on core C to move player and check passing go
-// (2/28) passing go works when dice is rolled
+// (2/28) passing go works for now while only one node in list
 void movePlayer(int steps) {
 
     //checks if board is empty and if it is it exits the function using return
@@ -183,7 +166,7 @@ void movePlayer(int steps) {
     }
 
     for (int i = 0; i < steps; i++) {
-        //checks if player is about to pass go
+        //for each iteration it checks if player is about to pass go
         //player = tail because it checks when its about to go back to the head node
         if (playerNode == tailNode) {
             passGoCount++;
@@ -206,20 +189,47 @@ return passGoCount;
 }
 // -------------------------------
 // Core D: Controlled Board Display
-// -------------------------------
+// ------------------------------
+
+//(3/6) got data of player node to print
 void printFromPlayer(int count) {
 // TODO:
 // - Print exactly 'count' nodes starting from playerNode
 // - Must not infinite loop
 // - Must handle empty list
 // - Output must be deterministic and readable
-cout << "printFromPlayer unwritten" << endl;
+//cout << "printFromPlayer unwritten" << endl;
+
+    //sets current to where the player node is
+    Node<T> *current = playerNode;
+
+
+    for (int i = 0; i < count; i++) {
+        current->data.print();   //prints the data of the node the player is on
+        cout << endl;
+
+        //moves to the next node
+        current = current->nextNode;
+    }
 }
 // Optional helper: print full board once (one full cycle)
+
+//(3/6)got the print to work showing the whole board
 void printBoardOnce() {
 // TODO:
 // - Traverse exactly one full cycle and print each node
-cout << "printBoardOnce unwritten" << endl;
+//cout << "printBoardOnce unwritten" << endl;
+
+    //sets current to head
+    Node<T>* current = headNode;
+
+    do {
+        current->data.print();  //prints the space of current node
+        cout << endl;
+
+        current = current->nextNode;  //moves to the next node
+    }
+    while (current != headNode);  //loops while current isn't on the head node
 }
 // -------------------------------
 // Advanced Option A (Level 1): removeByName
@@ -300,14 +310,78 @@ CircularLinkedList<MonopolySpace> board;
 // The only requirement: never exceed MAX_SPACES and keep the list circular.
 //
 // Example (hardcoded) usage:
-// vector<MonopolySpace> spaces;
-// spaces.push_back(MonopolySpace("GO","None",0,0));
-// ...
-// board.addMany(spaces);
-//
+vector<MonopolySpace> spaces;
+spaces.push_back(MonopolySpace("GO","None",0,0));
+//(3/6) hard coded new spaces and looked up all the space names to do so
+// Brown
+spaces.push_back(MonopolySpace("Mediterranean Ave","Brown",60,2));
+spaces.push_back(MonopolySpace("Baltic Ave","Brown",60,4));
+
+// Light Blue
+spaces.push_back(MonopolySpace("Oriental Ave","Light Blue",100,6));
+spaces.push_back(MonopolySpace("Vermont Ave","Light Blue",100,6));
+spaces.push_back(MonopolySpace("Connecticut Ave","Light Blue",120,8));
+
+// Pink
+spaces.push_back(MonopolySpace("St. Charles Place","Pink",140,10));
+spaces.push_back(MonopolySpace("States Ave","Pink",140,10));
+spaces.push_back(MonopolySpace("Virginia Ave","Pink",160,12));
+
+// Railroads
+spaces.push_back(MonopolySpace("Reading Railroad","Railroad",200,25));
+spaces.push_back(MonopolySpace("Pennsylvania Railroad","Railroad",200,25));
+spaces.push_back(MonopolySpace("B. & O. Railroad","Railroad",200,25));
+spaces.push_back(MonopolySpace("Short Line","Railroad",200,25));
+
+// Orange
+spaces.push_back(MonopolySpace("St. James Place","Orange",180,14));
+spaces.push_back(MonopolySpace("Tennessee Ave","Orange",180,14));
+spaces.push_back(MonopolySpace("New York Ave","Orange",200,16));
+
+// Red
+spaces.push_back(MonopolySpace("Kentucky Ave","Red",220,18));
+spaces.push_back(MonopolySpace("Indiana Ave","Red",220,18));
+spaces.push_back(MonopolySpace("Illinois Ave","Red",240,20));
+
+// Yellow
+spaces.push_back(MonopolySpace("Atlantic Ave","Yellow",260,22));
+spaces.push_back(MonopolySpace("Ventnor Ave","Yellow",260,22));
+spaces.push_back(MonopolySpace("Marvin Gardens","Yellow",280,24));
+
+// Green
+spaces.push_back(MonopolySpace("Pacific Ave","Green",300,26));
+spaces.push_back(MonopolySpace("North Carolina Ave","Green",300,26));
+spaces.push_back(MonopolySpace("Pennsylvania Ave","Green",320,28));
+
+// Dark Blue
+spaces.push_back(MonopolySpace("Park Place","Dark Blue",350,35));
+spaces.push_back(MonopolySpace("Boardwalk","Dark Blue",400,50));
+
+// Utilities
+spaces.push_back(MonopolySpace("Electric Company","Utility",150,0));
+spaces.push_back(MonopolySpace("Water Works","Utility",150,0));
+
+// Chance / Community Chest / Taxes
+spaces.push_back(MonopolySpace("Community Chest 1","None",0,0));
+spaces.push_back(MonopolySpace("Community Chest 2","None",0,0));
+spaces.push_back(MonopolySpace("Community Chest 3","None",0,0));
+spaces.push_back(MonopolySpace("Chance 1","None",0,0));
+spaces.push_back(MonopolySpace("Chance 2","None",0,0));
+spaces.push_back(MonopolySpace("Chance 3","None",0,0));
+spaces.push_back(MonopolySpace("Income Tax","None",200,0));
+spaces.push_back(MonopolySpace("Luxury Tax","None",100,0));
+
+//Jail / Free Parking / Go To Jail
+spaces.push_back(MonopolySpace("Jail","None",0,0));
+spaces.push_back(MonopolySpace("Free Parking","None",0,0));
+spaces.push_back(MonopolySpace("Go To Jail","None",0,0));
+
+board.addMany(spaces);
 // NOTE: This starter calls addSpace once to show the intended API,
 // but your final submission should build a meaningful board.
 board.addSpace(MonopolySpace("GO", "None", 0, 0));
+//(3/6) added a call to print board
+board.printBoardOnce();
 // -------------------------------
 // Playable Traversal Loop
 // -------------------------------
