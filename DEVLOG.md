@@ -21,13 +21,13 @@ ENGINEERING DECISION ENTRY:
 **Commit(s):**
 ---
 ### Entry 3
-**Date:** YYYY-MM-DD
+**Date:** 2026-03-07
 **Entry Type:** Bug Fix / Edge Case / Engineering Decision
-**Task worked on:**
-**Issue or decision:**
-**Error message / symptom (if applicable):**
-**What I tried:**
-**Fix / resolution (or final decision):**
+**Task worked on:advanced option b: mirror the board
+**Issue or decision:decided the loop thorugh the linked list and reverse each pointer one at a time, and used temp to hold data so i dont lose the rest of the board while doing so
+**Error message / symptom (if applicable):had issues getting it back to loop to the head node after reversing 
+**What I tried:thought it was the ammount of times the loop ran so was looking into that 
+**Fix / resolution (or final decision):got the linked list to point to the next node after head after looping then setting the head = to previous
 **Commit(s):**
 ---
 ### Entry 4
