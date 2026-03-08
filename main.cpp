@@ -138,12 +138,15 @@ int addMany(vector<T> values) {
     int added = 0;
 
     for (int i = 0; i < MAX_SPACES; i++) {
+
+        //gets whatever i is equal to from the vector then calls addSpace to add a space at that spot
         if (addSpace(values[i])) {
             added++;
         }
     }
 
     cout <<"Spaces add: "<< added << endl;
+    return added;
 
     // TODO:
     // - Add sequentially until full
@@ -151,7 +154,6 @@ int addMany(vector<T> values) {
     // - Return number successfully added
     // - Do not corrupt pointers if capacity is exceeded
     //cout << "addMany unwritten" << endl;
-    return added;
 }
 // -------------------------------
 // Core C: Traversal-Based Player Movement
@@ -289,29 +291,68 @@ void mirrorBoard() {
     }
 
     current->nextNode = previous;
-    headNode = previous;        //makes the last node the head
+    headNode = previous;        // makes the last node the head
 
 cout <<endl<< "Advanced Option B: mirrorBoard" << endl;
 }
 // -------------------------------
 // Edge-case helper: countSpaces O(n)
 // -------------------------------
+// (3/8) worked on counting spaces without using node count
 int countSpaces() {
 // TODO:
 // - Must be O(n), traverse exactly once with correct stop condition
 // - Do NOT rely on nodeCount for this method
-cout << "countSpaces unwritten" << endl;
-return 0;
+//cout << "countSpaces unwritten" << endl;
+
+    if (headNode == nullptr) {
+        return 0;
+    }
+
+    int count = 0;
+    Node<T> *current = headNode;
+
+    //increases count as current moves through the list
+    do {
+        count++;
+        current = current->nextNode;
+    }
+    while (current != headNode);
+
+    cout << endl << "The O(n) count: " << count << endl;
+
+    return count;
 }
 // -------------------------------
 // Cleanup
 // -------------------------------
+
+// (3/8) worked on deleting all nodes from the list
 void clear() {
 // TODO:
 // - Safely delete all nodes
 // - Tip: if tailNode exists, break the cycle first: tailNode->nextNode =nullptr
 // - Then delete like a normal singly linked list
-cout << "clear unwritten" << endl;
+//cout << "clear unwritten" << endl;
+
+
+    if (nodeCount == 0) {
+        return;
+    }
+
+    tailNode->nextNode = nullptr;   // breaks the loop making it a singly linked list
+    Node<T> *temp = headNode;
+
+    while (nodeCount != 0) {
+        headNode = headNode->nextNode;      // moves the head to the next node
+        delete temp;                        // deletes temp
+        temp = headNode;                    // temp becomes new head node
+        nodeCount--;                        // makes node count smaller
+    }
+
+    headNode = nullptr;     // set to null so it doesn't point to deleted memory
+    tailNode = nullptr;
+   nodeCount = 0;
 }
 };
 // -------------------------------
@@ -424,8 +465,13 @@ cout << "Times passed GO so far: " << board.getPassGoCount() << endl;
 // board.removeByName("Baltic Avenue");
 // vector<string> brownProps = board.findByColor("Brown");
 //
+
+board.countSpaces();        // calls countSpaces
 // Option B example:
 board.mirrorBoard();
-board.printBoardOnce();     //called print board again to print the reversed board after pointers are reversed
+board.printBoardOnce();     // called print board again to print the reversed board after pointers are reversed
+
+board.clear();              // calls clear
+board.printBoardOnce();     // called this again just to make sure nothing prints
 return 0;
 }
