@@ -132,11 +132,12 @@ bool addSpace(T value) {
 // (2/28) worked on core B to add multiple spaces
 // (2/28) couldn't get multiple spaces to be added will try and fix tomorrow
 // (3/6) added an added integer to count how many spaces where added and changed my loop to call addSpace since the logic was already there
+// (3/7) simplified my for loop to just check max spaces
 int addMany(vector<T> values) {
 
     int added = 0;
 
-    for (int i = 0; i < values.size() && nodeCount < MAX_SPACES; i++) {
+    for (int i = 0; i < MAX_SPACES; i++) {
         if (addSpace(values[i])) {
             added++;
         }
@@ -221,7 +222,7 @@ void printBoardOnce() {
 //cout << "printBoardOnce unwritten" << endl;
 
     //sets current to head
-    Node<T>* current = headNode;
+    Node<T> *current = headNode;
 
     do {
         current->data.print();  //prints the space of current node
@@ -262,13 +263,35 @@ return matches;
 // -------------------------------
 // Advanced Option B (Level 2): Mirror the Board (Circular Reversal)
 // -------------------------------
+
+// (3/7) worked on mirroring the board for my advanced option
 void mirrorBoard() {
 // TODO:
 // - Reverse the direction of the circular list by reversing next pointers
 // - Preserve circular structure
 // - Correctly handle empty list and single-node list
 // - Player cursor must remain on the same logical space after reversal
-cout << "mirrorBoard unwritten" << endl;
+
+    //handles empty and single node list
+    if (headNode == nullptr || headNode->nextNode == headNode) {
+        return;
+    }
+
+    Node<T> *previous = headNode;      // previous points to the node before the current node
+    Node<T> *current = headNode->nextNode;   // current is the node being processed at that time
+    Node<T> *temp;      // used as temp storage to save where the node originally pointed to
+
+    while (current != headNode) {
+        temp = current->nextNode;       // saves the next node
+        current->nextNode = previous;   // reverses the pointer to the node before
+        previous = current;             // moves previous to the next node
+        current = temp;                 // moves current to the next node
+    }
+
+    current->nextNode = previous;
+    headNode = previous;        //makes the last node the head
+
+cout <<endl<< "Advanced Option B: mirrorBoard" << endl;
 }
 // -------------------------------
 // Edge-case helper: countSpaces O(n)
@@ -312,7 +335,8 @@ CircularLinkedList<MonopolySpace> board;
 // Example (hardcoded) usage:
 vector<MonopolySpace> spaces;
 spaces.push_back(MonopolySpace("GO","None",0,0));
-//(3/6) hard coded new spaces and looked up all the space names to do so
+
+// (3/6) hard coded new spaces and looked up all the space names to do so
 // Brown
 spaces.push_back(MonopolySpace("Mediterranean Ave","Brown",60,2));
 spaces.push_back(MonopolySpace("Baltic Ave","Brown",60,4));
@@ -401,6 +425,7 @@ cout << "Times passed GO so far: " << board.getPassGoCount() << endl;
 // vector<string> brownProps = board.findByColor("Brown");
 //
 // Option B example:
-// board.mirrorBoard();
+board.mirrorBoard();
+board.printBoardOnce();     //called print board again to print the reversed board after pointers are reversed
 return 0;
 }
